@@ -33,12 +33,12 @@
             </a>
           </li>
           <li @click="ChoseBar(3)">
-              <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">                
-                <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 14H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v1M5 19h5m-9-9h5m4-4h8a1 1 0 0 1 1 1v12H9V7a1 1 0 0 1 1-1Zm6 8a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z"/>
-                </svg>
-                <span class="flex-1 ms-3 whitespace-nowrap">Прокси пресеты</span>
-              </a>
+            <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">                
+              <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 14H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v1M5 19h5m-9-9h5m4-4h8a1 1 0 0 1 1 1v12H9V7a1 1 0 0 1 1-1Zm6 8a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z"/>
+              </svg>
+              <span class="flex-1 ms-3 whitespace-nowrap">Прокси пресеты</span>
+            </a>
           </li>
           <li @click="ChoseBar(4)">
             <button type="button" class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" aria-controls="dropdown-example" data-collapse-toggle="dropdown-example">
@@ -54,6 +54,14 @@
                 <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M1 10c1.5 1.5 5.25 3 9 3s7.5-1.5 9-3m-9-1h.01M2 19h16a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1ZM14 5V3a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v2h8Z"/>
               </svg>
               <span class="flex-1 ms-3 whitespace-nowrap">Сессии</span>                
+            </a>
+          </li>
+          <li @click="ChoseBar(6)">
+            <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+              <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 20 20">
+                <path stroke="currentColor" stroke-linecap="square" stroke-linejoin="round" stroke-width="2" d="M10 19H5a1 1 0 0 1-1-1v-1a3 3 0 0 1 3-3h2m10 1a3 3 0 0 1-3 3m3-3a3 3 0 0 0-3-3m3 3h1m-4 3a3 3 0 0 1-3-3m3 3v1m-3-4a3 3 0 0 1 3-3m-3 3h-1m4-3v-1m-2.121 1.879-.707-.707m5.656 5.656-.707-.707m-4.242 0-.707.707m5.656-5.656-.707.707M12 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+              </svg>
+              <span class="flex-1 ms-3 whitespace-nowrap">Инфо</span>                
             </a>
           </li>
           <li @click="toggleDark()">
@@ -116,7 +124,8 @@
     <CombolistForm v-if="layer == 2" />
     <ProxyconfigForm v-if="layer == 3" />
     <ModulesForm v-if="layer == 4" />
-    <SessionForm v-if="layer == 5" />    
+    <SessionForm v-if="layer == 5" />
+    <SettingsInfoForm v-if="layer == 6" />
   </div>
 </template>
 
@@ -127,15 +136,16 @@ import CombolistForm from './Bars/CombolistForm.vue'
 import ProxyconfigForm from './Bars/ProxyconfigForm.vue'
 import ModulesForm from './Bars/ModuleForm.vue'
 import SessionForm from './Bars/SessionForm.vue'
+import SettingsInfoForm from './Bars/SettingsInfoForm.vue';
 
 export default {
   Components: {
     CombolistForm,
     ProxyconfigForm,
     ModulesForm,
-    SessionForm
+    SessionForm,
+    SettingsInfoForm
   },
-  inject: ['server_addr'],
   data() {
     return {
       msg_txt: null,
@@ -225,6 +235,9 @@ export default {
           break
           case 5:
           this.title = 'Сессии'
+          break
+          case 6:
+          this.title = 'Инфо'
           break
       }
     },

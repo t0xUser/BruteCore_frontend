@@ -146,7 +146,6 @@ function getSurroundingInts(selectedNumber, maxNumber) {
 }
 
 export default {
-  inject: ['server_addr'],
   props: ['sessionId', 'isShow', 'moduleType'],
   watch: {
     async isShow() {
@@ -183,40 +182,6 @@ export default {
     }
   },
   methods: {
-    async HTTP(method, addr, body) {
-      const accessToken = localStorage.getItem('accessToken')
-      if (!accessToken) {
-        this.GoToLogin()
-      }
-
-      try {
-        let headobj = {
-          headers: {
-            'Authorization': localStorage.accessToken,
-            'Content-Type': 'application/json'
-          }
-        }
-        let response
-        if (method === 'get' || method === 'GET') {
-          response = await axios.get(this.server_addr+addr, headobj)
-        } else {
-          response = await axios.post(this.server_addr+addr, body, headobj)
-        }       
-        return response.data
-      } catch(err) {
-        if (err.response.data.msg_txt !== undefined) {
-          return {
-            success: false,
-            msg_txt: err.response.data.msg_txt,
-          }
-        } else {
-          return {
-            success: false,
-            msg_txt: err.response.data.msg_txt,
-          }
-        }        
-      }
-    },
     async mount() {
       const response = await this.HTTP('GET', '/api/sess/GetStatistic/?id='+this.sessionId, null)
       if (response.success) {

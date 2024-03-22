@@ -143,13 +143,14 @@
                   <tr v-for="item in insertItem.links" :key="item" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                     <td class="px-6 py-1">
                       <select v-model="item.type" id="category" class="px-6 py-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-800 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                        <!--<option value="15">Локальный файл</option>-->
+                        <option :value="'LT1'">Локальный файл</option>
                         <option :value="'LT2'">Удаленный файл</option>
                         <option :value="'LT3'">Ссылка</option>
                       </select>
                     </td>              
                     <td class="px-6 py-1 dark:text-white">
-                      <input v-model="item.path" type="text" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-800 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Введите источник" required>
+                      <input v-if="item.type == 'LT1'" @change="item.path = $event.target.files[0]" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="file_input" type="file">            
+                      <input v-if="item.type == 'LT2' || item.type == 'LT3'" v-model="item.path" type="text" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-800 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Введите источник" required>
                     </td>
                     <td class="px-6 py-4">
                       <a @click.prevent="itemAction('remove', item.id)" href="#" class="font-medium text-red-600 dark:text-red-500 hover:underline">Удалить</a>
@@ -161,6 +162,10 @@
 
           </div>
           <button @click.prevent="OPRAddItem"  type="button" class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Создать файл</button>
+          <div v-if="uploading">
+            <p>Прогресс: {{ progress }}%</p>
+            <progress :value="progress" max="100"></progress>
+          </div>
         </form>
       </div>
     </div>
@@ -218,7 +223,6 @@ export default {
     ComboItem,
     AlertForm,
   },
-  inject: ['server_addr'],
   data() {
     return {
       msg_txt: null,
@@ -230,6 +234,8 @@ export default {
       selectedObj: null,
       
       insertItem: {},
+      uploading: false,
+      progress: 0
     };
   },
   async mounted() {
@@ -265,40 +271,6 @@ export default {
         case "select": this.OPRSelectItem(id); break;          
       }
     },
-    async HTTP(method, addr, body) {
-      const accessToken = localStorage.getItem('accessToken')
-      if (!accessToken) {
-        this.GoToLogin()
-      }
-
-      try {
-        let headobj = {
-          headers: {
-            'Authorization': localStorage.accessToken,
-            'Content-Type': 'application/json'
-          }
-        }
-        let response
-        if (method === 'get' || method === 'GET') {
-          response = await axios.get(this.server_addr+addr, headobj)
-        } else {
-          response = await axios.post(this.server_addr+addr, body, headobj)
-        }      
-        return response.data
-      } catch(err) {
-        if (err.response.data.msg_txt !== undefined) {
-          return {
-            success: false,
-            msg_txt: err.response.data.msg_txt,
-          }
-        } else {
-          return {
-            success: false,
-            msg_txt: err.response.data.msg_txt,
-          }
-        }        
-      }
-    },
     async OPRDeleteItem(index) {
       const response = await this.HTTP('GET', '/api/list/DeleteComboList/?id='+index, null)
       if (response.success) {
@@ -323,20 +295,96 @@ export default {
     async OPRAddItem() {
       this.msg_txt = null
       this.msg_id = null
-
-      const response = await this.HTTP('POST', '/api/list/UploadComboList', this.insertItem)
-      if (response.success) {
-        this.insertItem.id = response.id
-        this.insertItem.create_time = response.create_time      
-        addNode(this.tree, this.insertItem.p_id, this.insertItem)
-        
-        this.msg_txt = 'Элемент добавлен в список'
-        this.msg_id = 1
-      } else {
-        this.msg_txt = response.msg_txt
+      
+      if (this.insertItem.name == null || this.insertItem.name == '') {
+        this.msg_txt = 'Наименование комбо-листа/папки не указано'
         this.msg_id = 0
       }
-      this.insertItem = {}        
+
+      if (this.insertItem.type == null || (this.insertItem.type !== 'CL1' && this.insertItem.type !== 'CL2')) {
+        this.msg_txt = 'Невозможно определить тип элемента'
+        this.msg_id = 0
+      }
+
+      if (this.insertItem.type == 'CL2') {
+        if ((this.insertItem.data_type == null || this.insertItem.data_type === '')) {
+          this.msg_txt = 'Тип данных комбо-листа не указан'
+          this.msg_id = 0
+        }
+        
+        if ((this.insertItem.links == null || this.insertItem.links.length == 0)) {
+          this.msg_txt = 'Укажите источники комбо-листа'
+          this.msg_id = 0
+        }
+      
+
+        for (let i = 0; i < this.insertItem.links.length; i++) {
+          const obj = this.insertItem.links[i]
+          if (
+              ((obj.type == 'LT2' || obj.type == 'LT3') && (obj.path == null || obj.path == '')) ||
+              (obj.type == 'LT1' && obj.path == null)
+          ) {
+            this.msg_txt = 'Путь к источнику указан некорректно (id: '+obj.id+')'
+            this.msg_id = 0
+            break
+          } 
+        }
+      }
+
+      this.uploading = true
+      const formData = new FormData()
+      formData.append("name", this.insertItem.name)
+      formData.append("p_id", this.insertItem.p_id)
+      formData.append("type", this.insertItem.type)
+      formData.append("data_type", this.insertItem.data_type)
+      
+      if (this.insertItem.type == 'CL2') {
+        let id_types = ""
+        for (let i = 0; i < this.insertItem.links.length; i++) {
+          const obj = this.insertItem.links[i]
+          id_types += obj.id+":"+obj.type+";"
+          formData.append(`sid:${obj.id};type:${obj.type};`, obj.path)
+        }
+        if (id_types !== "") {
+          formData.append("id_types", id_types)
+        }
+      }
+
+
+      axios.post(this.server_addr+'/api/list/UploadComboList', formData, {
+        headers:{
+          'Authorization': localStorage.accessToken,
+          "Content-Type": "multipart/form-data",
+        },
+        onUploadProgress: (progressEvent) => {
+          this.progress = Math.round(
+            (progressEvent.loaded * 100) / progressEvent.total
+          );
+        }
+      })
+      .then(async (response) => {
+        if (response.data.success) {
+          this.insertItem.id = response.data.id
+          this.insertItem.create_time = response.data.create_time
+        
+          addNode(this.tree, this.insertItem.p_id, this.insertItem)
+          this.msg_txt = 'Элемент добавлен в список'
+          this.msg_id = 1
+          await this.mount() 
+        } else {
+          this.msg_txt = response.data.msg_txt
+          this.msg_id = 0
+        }
+      })
+      .catch((error) => {
+        this.msg_txt = error.response.data.msg_txt
+        this.msg_id = 0
+      })
+      .finally(() => {
+        this.insertItem = {}
+        this.uploading = false
+        this.progress = 0
+      })
     },
     itemAction(action, id) {
       if (action === 'remove') {

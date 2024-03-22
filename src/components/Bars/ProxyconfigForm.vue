@@ -53,10 +53,6 @@
               <td>{{ selectedObj.info.interval }}</td>
             </tr>            
             <tr>
-              <td>Таймаут(милисекунды):</td>
-              <td>{{ selectedObj.info.timeout }}</td>
-            </tr>
-            <tr>
               <td>Общее количество строк:</td>
               <td>{{ selectedObj.info.lines_count }}</td>
             </tr>
@@ -134,12 +130,6 @@
               <input v-model="insertPreset.interval" type="number" name="interval" id="interval" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
             </div>
             
-            <!-- Таймаут -->
-            <div class="col-span-3 sm:col-span-1">
-              <label for="timeout" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Таймаут (милесекунды)</label>
-              <input v-model="insertPreset.timeout" type="number" name="timeout" id="timeout" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-            </div>
-            
             <!-- Таблица источников -->
             <div class="col-span-3">
               <label for="description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Источники</label>
@@ -196,7 +186,6 @@
 
 <script>
 
-import axios from 'axios'
 import AlertForm from '../Common/AlertForm.vue'
 
 const selectedClassDay = 'bg-gray-100'
@@ -206,7 +195,6 @@ export default {
   components: {
     AlertForm,
   },
-  inject: ['server_addr'],
   data() {
     return {
       msg_txt: null,
@@ -227,44 +215,9 @@ export default {
     } 
   },
   methods: {
-    async HTTP(method, addr, body) {
-      const accessToken = localStorage.getItem('accessToken')
-      if (!accessToken) {
-        this.GoToLogin()
-      }
-
-      try {
-        let headobj = {
-          headers: {
-            'Authorization': localStorage.accessToken,
-            'Content-Type': 'application/json'
-          }
-        }
-        let response
-        if (method === 'get' || method === 'GET') {
-          response = await axios.get(this.server_addr+addr, headobj)
-        } else {
-          response = await axios.post(this.server_addr+addr, body, headobj)
-        }       
-        return response.data
-      } catch(err) {
-        if (err.response.data.msg_txt !== undefined) {
-          return {
-            success: false,
-            msg_txt: err.response.data.msg_txt,
-          }
-        } else {
-          return {
-            success: false,
-            msg_txt: err.response.data.msg_txt,
-          }
-        }        
-      }
-    },
     createPreset() {
       this.insertPreset = {
         use_update: false,
-        timeout: 15000,
         interval: 300,
         links: []
       }
@@ -325,10 +278,6 @@ export default {
 
       if (this.insertPreset.name === null || this.insertPreset.name === '') {
         this.msg_txt = 'Укажите наименование'
-      }
-
-      if (this.insertPreset.timeout < 1000 || this.insertPreset.timeout == null) {
-        this.msg_txt = 'Укажите таймаут'
       }
 
       if (this.insertPreset.interval < 10 && this.insertPreset.use_update == true) {

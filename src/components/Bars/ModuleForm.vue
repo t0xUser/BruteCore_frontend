@@ -77,7 +77,6 @@ export default {
   components: {
     AlertForm,
   },
-  inject: ['server_addr'],
   data() {
     return {
       msg_txt: null,
@@ -103,40 +102,6 @@ export default {
         this.msg_id = 0
       } 
     },
-    async HTTP(method, addr, body) {
-      const accessToken = localStorage.getItem('accessToken')
-      if (!accessToken) {
-        this.GoToLogin()
-      }
-
-      try {
-        let headobj = {
-          headers: {
-            'Authorization': localStorage.accessToken,
-            'Content-Type': 'application/json'
-          }
-        }
-        let response
-        if (method === 'get' || method === 'GET') {
-          response = await axios.get(this.server_addr+addr, headobj)
-        } else {
-          response = await axios.post(this.server_addr+addr, body, headobj)
-        }       
-        return response.data
-      } catch(err) {
-        if (err.response.data.msg_txt !== undefined) {
-          return {
-            success: false,
-            msg_txt: err.response.data.msg_txt,
-          }
-        } else {
-          return {
-            success: false,
-            msg_txt: err.response.data.msg_txt,
-          }
-        }        
-      }
-    },
     async DeleteModule(index) {
       const response = await this.HTTP('GET', '/api/modl/DeleteModule/?id='+index, null)
       if (response.success) {
@@ -159,7 +124,7 @@ export default {
         return
       }
 
-      this.uploading = true;
+      this.uploading = true
       const formData = new FormData();
       formData.append("file", this.selectedFile)
       axios.post(this.server_addr+'/api/modl/UploadModule', formData, {

@@ -3,7 +3,7 @@
     <div v-if="!ShowResults">
     <div class="flex justify-between items-center mb-4 px-5 pt-2">
       <button @click.prevent="$emit('nullate_session_id')" type="button" class="w-44 h-11 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-2 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-        <svg class="w-6 h-6 text-gray-800 dark:text-white inline" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 8 14">        
+        <svg class="w-6 h-6 inline" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 8 14">        
           <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 1 1.3 6.326a.91.91 0 0 0 0 1.348L7 13"/>          
         </svg>
         Назад к сессиям
@@ -24,28 +24,43 @@
       
       <button @click="ShowResults = true" class="w-52 h-11 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-2 py-2.5 text-center dark:blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
         Перейти к результатам
-        <svg class="w-6 h-6 text-gray-800 dark:text-white inline" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 8 14">
+        <svg class="w-6 h-6 inline" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 8 14">
           <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 13 5.7-5.326a.909.909 0 0 0 0-1.348L1 1"/>
         </svg>        
       </button>
     </div>
 
     <!-- Кнопки в левой части -->
-    <div class="flex items-center mb-4 px-5">
-      <button v-if="session.module_type == 'MT1'" @click.prevent="ItemSelect(1, 0)" class="mr-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Выбрать комбо лист</button>
-      <button v-if="session.module_type == 'MT2'" @click.prevent="ItemSelect(1, 0)" class="mr-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Выбрать хосты</button>
-      <button v-if="session.module_type == 'MT2'" @click.prevent="ItemSelect(1, 1)" class="mr-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Выбрать логины</button>
-      <button v-if="session.module_type == 'MT2'" @click.prevent="ItemSelect(1, 2)" class="mr-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Выбрать пароли</button>
-      <button @click.prevent="ItemSelect(2, 0)" class="mr-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Выбрать прокси пресет</button>
-      <button @click.prevent="ItemSelect(4, 0)" class="mr-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Выбрать прокси из файла</button>
-      <button @click.prevent="AlterField('status', 'ST5')" class="mr-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Запустить</button>
-      <button @click.prevent="AlterField('status', 'ST7')" class="mr-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Остановить</button>      
-      <label for="numberBox" class="mr-4 text-sm font-medium text-gray-400 dark:text-gray-500">Потоки</label>
+    <div class="flex items-center mb-1 px-5">
+      <button v-if="session.module_type == 'MT1'" @click.prevent="ItemSelect(1, 0)" class="mr-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-44">Комбо лист(пресет)</button>
+      <button v-if="session.module_type == 'MT2'" @click.prevent="ItemSelect(1, 0)" class="mr-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-40">Хосты(пресет)</button>
+      <button v-if="session.module_type == 'MT2'" @click.prevent="ItemSelect(1, 1)" class="mr-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-40">Логины(пресет)</button>
+      <button v-if="session.module_type == 'MT2'" @click.prevent="ItemSelect(1, 2)" class="mr-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-40">Пароли(пресет)</button>
+      <button @click.prevent="ItemSelect(2, 0)" class="mr-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-44">Прокси(пресет)</button>
+      <button @click.prevent="AlterField('status', 'ST5')" class="mr-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-40">Запустить</button>
+      <label for="numberBox" class="mr-4 text-sm font-medium text-gray-400 dark:text-gray-500 w-12">Потоки</label>
       <input v-model="worker_count_value" id="numberBox" type="number" class="w-36 px-4 py-2.5 text-gray-700 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:ring-blue-600 dark:focus:border-blue-600">
       <svg @click="AlterField('worker_count', worker_count_value)" class="pl-2 w-12 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 12">
         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5.917 5.724 10.5 15 1.5"/>
       </svg>        
       <svg @click="worker_count_value = session.worker_count" class="pl-2 w-12 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+      </svg> 
+    </div>
+
+    <div class="flex items-center mb-3 px-5">
+      <button v-if="session.module_type == 'MT1'" @click.prevent="ItemSelect(3, 0)" class="mr-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-44">Комбо лист(файл)</button>
+      <button v-if="session.module_type == 'MT2'" @click.prevent="ItemSelect(3, 0)" class="mr-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-40">Хосты(файл)</button>
+      <button v-if="session.module_type == 'MT2'" @click.prevent="ItemSelect(3, 1)" class="mr-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-40">Логины(файл)</button>
+      <button v-if="session.module_type == 'MT2'" @click.prevent="ItemSelect(3, 2)" class="mr-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-40">Пароли(файл)</button>
+      <button @click.prevent="ItemSelect(4, 0)" class="mr-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-44">Прокси(файл)</button>
+      <button @click.prevent="AlterField('status', 'ST7')" class="mr-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-40">Остановить</button>      
+      <label for="numberBox" class="mr-4 text-sm font-medium text-gray-400 dark:text-gray-500 w-12">Таймаут</label>
+      <input v-model="timeout_value" id="numberBox" type="number" class="w-36 px-4 py-2.5 text-gray-700 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:ring-blue-600 dark:focus:border-blue-600">
+      <svg @click="AlterField('timeout', timeout_value)" class="pl-2 w-12 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 12">
+        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5.917 5.724 10.5 15 1.5"/>
+      </svg>        
+      <svg @click="timeout_value = session.timeout" class="pl-2 w-12 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
       </svg> 
     </div>
@@ -331,6 +346,50 @@
         </div>
       </div>
     </div>
+    <!-- Модальное окно выбора комбо листа из файла -->
+    <div v-if="select_item === 3" id="proxy-modal" tabindex="-1" aria-hidden="true" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 overflow-y-auto overflow-x-hidden z-50 w-full max-w-md max-h-full">
+      <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <!-- Modal content -->
+        <div class="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
+          <!-- Modal header -->
+          <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Выбор комбо-листа из файла</h3>
+            <button @click="select_item = 0" type="button" class="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="authentication-modal">
+              <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+              </svg>
+              <span class="sr-only">Close modal</span>
+            </button>
+          </div>
+
+          <!-- Modal body -->
+          <div class="p-4 md:p-5">
+            <form class="space-y-4" action="#">
+              <div class="col-span-3 sm:col-span-1">
+                <label for="timeout" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Тип данных</label>
+                <select v-model="insertItem.data_type" id="category" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-800 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                  <option :value="'DT1'">EMAIL</option>
+                  <option :value="'DT2'">USERNAME</option>
+                  <option :value="'DT3'">PASSWORD</option>
+                  <option :value="'DT4'">PIN</option>
+                  <option :value="'DT5'">USERNAME:PASSWORD</option>
+                  <option :value="'DT6'">EMAIL:PASSWORD</option>
+                  <option :value="'DT7'">DATA</option>
+                  <option :value="'DT8'">HOSTNAME</option>    
+                </select>
+              </div>
+                
+              <input @change="insertItem.file = $event.target.files[0]" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="file_input" type="file">            
+              <button @click.prevent="UploadSessionComboList()"  type="button" class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Выбрать комбо-лист из файла</button>
+              <div v-if="uploading">
+                <p>Прогресс: {{ progress }}%</p>
+                <progress :value="progress" max="100"></progress>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>    
     <!-- Модальное окно выбора Прокси из файла -->
     <div v-if="select_item === 4" id="proxy-modal" tabindex="-1" aria-hidden="true" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 overflow-y-auto overflow-x-hidden z-50 w-full max-w-md max-h-full">
       <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
@@ -351,10 +410,6 @@
           <div class="p-4 md:p-5">
             <form class="space-y-4" action="#">
               <div class="col-span-3 sm:col-span-1">
-                <label for="timeout" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Таймаут (милесекунды)</label>
-                <input v-model="insertItem.timeout" type="number" name="timeout" id="timeout" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-              </div>
-              <div class="col-span-3 sm:col-span-1">
                 <label for="timeout" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Тип прокси</label>
                 <select v-model="insertItem.proxy_type" id="category" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-800 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                   <option :value="'PT1'">HTTP/S</option>
@@ -365,6 +420,10 @@
                 
               <input @change="insertItem.file = $event.target.files[0]" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="file_input" type="file">            
               <button @click.prevent="UploadSessionProxy()"  type="button" class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Выбрать прокси из файла</button>
+              <div v-if="uploading">
+                <p>Прогресс: {{ progress }}%</p>
+                <progress :value="progress" max="100"></progress>
+              </div>
             </form>
           </div>
         </div>
@@ -396,7 +455,6 @@ export default {
     ComboItem,
     SessionResult
   },
-  inject: ['server_addr'],
   props: ['session_id'],
   data() {
     return {
@@ -404,6 +462,7 @@ export default {
       msg_id: 0,
       name_value: null,
       worker_count_value: null,
+      timeout_value: null,
       select_item: 0,
       tree: null,
       showId: -1,
@@ -412,7 +471,9 @@ export default {
       comboSelectionType: 0,
       
       session: {},
-      insertItem: {}
+      insertItem: {},
+      uploading: false,
+      progress: 0
     }
   },
   watch: {
@@ -432,6 +493,7 @@ export default {
         this.session = response.session
         this.name_value = this.session.name
         this.worker_count_value = this.session.worker_count
+        this.timeout_value = this.session.timeout
         if (this.session.inputs !== null) {
           this.session.inputs.forEach(input => {
             if (input.type === 'IT4') {
@@ -443,40 +505,6 @@ export default {
       } else {
         this.msg_txt = response.msg_txt 
         this.msg_id = 0
-      }
-    },
-    async HTTP(method, addr, body) {
-      const accessToken = localStorage.getItem('accessToken')
-      if (!accessToken) {
-        this.GoToLogin()
-      }
-
-      try {
-        let headobj = {
-          headers: {
-            'Authorization': localStorage.accessToken,
-            'Content-Type': 'application/json'
-          }
-        }
-        let response
-        if (method === 'get' || method === 'GET') {
-          response = await axios.get(this.server_addr+addr, headobj)
-        } else {
-          response = await axios.post(this.server_addr+addr, body, headobj)
-        }       
-        return response.data
-      } catch(err) {
-        if (err.response.data.msg_txt !== undefined) {
-          return {
-            success: false,
-            msg_txt: err.response.data.msg_txt,
-          }
-        } else {
-          return {
-            success: false,
-            msg_txt: err.response.data.msg_txt,
-          }
-        }        
       }
     },
     async AlterField(Field, Value) {
@@ -516,7 +544,12 @@ export default {
       if (i === 4) {
         this.insertItem = {}
         this.insertItem.proxy_type = 'PT1'
-        this.insertItem.timeout = 15000
+        return
+      }
+
+      if (i === 3) {
+        this.insertItem = {}
+        this.insertItem.data_type = 'DT1'
         return
       }
       
@@ -586,9 +619,6 @@ export default {
     async UploadSessionProxy() {
       this.msg_txt = null 
       this.msg_id = -1
-      if (this.insertItem.timeout < 1000 || this.insertItem.timeout == null) {
-        this.msg_txt = 'Укажите таймаут'
-      }     
       if (this.insertItem.file == null) {
         this.msg_txt = 'Укадите файл с прокси'
       }
@@ -599,29 +629,97 @@ export default {
         this.msg_id = 0
         return
       }
-
-      let reader = new FileReader()
-      reader.onload  = async () => { 
-        this.insertItem.data = btoa(reader.result)
-        this.insertItem.session_id = this.session_id
-        delete this.insertItem.file        
-        const response = await this.HTTP('POST', '/api/sess/UploadProxy', this.insertItem)
-        if (response.success) {
-          this.insertItem = null
-          this.select_item = 0
+      
+      this.uploading = true
+      const formData = new FormData()
+      formData.append("proxy_type", this.insertItem.proxy_type)
+      formData.append("session_id", this.session_id)
+      formData.append("file", this.insertItem.file)
+      
+      axios.post(this.server_addr+'/api/sess/UploadProxy', formData, {
+        headers:{
+          'Authorization': localStorage.accessToken,
+          "Content-Type": "multipart/form-data",
+        },
+        onUploadProgress: (progressEvent) => {
+          this.progress = Math.round(
+            (progressEvent.loaded * 100) / progressEvent.total
+          );
+        }
+      })
+      .then(async (response) => {
+        if (response.data.success) {
           this.msg_txt = 'Прокси были загружены'
           this.msg_id = 1
           await this.mount()
         } else {
-          this.msg_txt = response.msg_txt
+          this.msg_txt = response.data.msg_txt
           this.msg_id = 0
         }
+      })
+      .catch((error) => {
+        this.msg_txt = error.response.data.msg_txt
+        this.msg_id = 0
+      })
+      .finally(() => {
+        this.select_item = 0
+        this.insertItem = {}
+        this.uploading = false
+        this.progress = 0
+      })
+    },
+    async UploadSessionComboList() {
+      this.msg_txt = null 
+      this.msg_id = -1
+      if (this.insertItem.file == null) {
+        this.msg_txt = 'Укадите файл с комбо-листом'
       }
-      reader.onerror = () => { 
-        this.msg_txt = 'Ошибка чтения файла'
-        this.msg_id = 0 
+      if (this.insertItem.file.name.slice(-4).toUpperCase() !== '.TXT') {
+        this.msg_txt = 'Формат файла не соответствует'
       }
-      reader.readAsText(this.insertItem.file)
+      if (this.msg_txt != null) {
+        this.msg_id = 0
+        return
+      }
+
+      this.uploading = true
+      const formData = new FormData()
+      formData.append("session_id", this.session_id)
+      formData.append("combo_type", this.comboSelectionType)
+      formData.append("data_type", this.insertItem.data_type)
+      formData.append("file", this.insertItem.file)
+      
+      axios.post(this.server_addr+'/api/sess/UploadComboList', formData, {
+        headers:{
+          'Authorization': localStorage.accessToken,
+          "Content-Type": "multipart/form-data",
+        },
+        onUploadProgress: (progressEvent) => {
+          this.progress = Math.round(
+            (progressEvent.loaded * 100) / progressEvent.total
+          );
+        }
+      })
+      .then(async (response) => {
+        if (response.data.success) {
+          this.msg_txt = 'Комбо-лист успешно загружен'
+          this.msg_id = 1
+          await this.mount()
+        } else {
+          this.msg_txt = response.data.msg_txt
+          this.msg_id = 0
+        }
+      })
+      .catch((error) => {
+        this.msg_txt = error.response.data.msg_txt
+        this.msg_id = 0
+      })
+      .finally(() => {
+        this.select_item = 0
+        this.insertItem = {}
+        this.uploading = false
+        this.progress = 0
+      })
     },
     parentMethod(action, id) {
       if (action === "select") {

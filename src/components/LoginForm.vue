@@ -53,7 +53,6 @@ import AlertForm from './Common/AlertForm.vue'
 
 export default {
   components: { AlertForm },
-  inject: ['server_addr'],
   data() {
     return {
       username  : '',
